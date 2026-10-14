@@ -1,0 +1,172 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * theme.css — shared design tokens for CoachDesk (admin, trainer, client)
+ *
+ * App-specific values (sidebar width, header height, mobile-vs-desktop layout)
+ * stay in each HTML file's own <style> block. This file owns ONLY tokens that
+ * should match across all three apps.
+ *
+ * Brand purple + semantic status palette mirror the mobile app's AppColors
+ * (lib/core/theme/app_colors.dart in client_mobile) so web and mobile read
+ * as the same product.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Brand */
+  --primary:        #6C63FF;
+  --primary-dark:   #574FD6;
+  --primary-light:  #EDE9FE;
+
+  /* Brand tint ramp — hue ~244°, soft periwinkle. Extends the 3 semantic
+   * tokens above for fills, charts, gradients, and hover states. Aliases:
+   * 100 = --primary-light, 600 = --primary, 700 = --primary-dark. */
+  --primary-50:     #F4F2FF;
+  --primary-200:    #DAD8FF;
+  --primary-300:    #C4BFFF;
+  --primary-400:    #A7A1FF;
+  --primary-500:    #8B82FF;
+  --primary-900:    #4A40B5;
+
+  /* Status (semantic — matches mobile AppColors) */
+  --success:        #1D9E75;
+  --success-light:  #E6F6F1;
+  --warning:        #C26B1A;
+  --warning-light:  #FFF1E2;
+  --danger:         #A32D2D;
+  --danger-light:   #F9E8E8;
+  --info:           #3B82F6;
+  --info-light:     #EFF6FF;
+
+  /* Surface + text */
+  --text:           #111827;
+  --text-muted:     #6B7280;
+  --border:         #E5E7EB;
+  --bg:             #F5F6FB;
+  --card:           #FFFFFF;
+  --bg-card:        #FFFFFF;  /* legacy alias used by client app */
+
+  /* Shape */
+  --radius:         12px;
+  --radius-sm:      8px;
+  --shadow:         0 1px 3px rgba(0,0,0,.07), 0 4px 12px rgba(0,0,0,.04);
+  --shadow-md:      0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+}
+
+/* Native checkboxes/radios default to the browser's blue; brand them once here
+   instead of per-input `accent-color` (dynamically built ones kept missing it). */
+input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
+
+/* Shared status pill — one base look across all three apps. */
+.cd-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.cd-pill--success { background: var(--success-light); color: var(--success); }
+.cd-pill--warning { background: var(--warning-light); color: var(--warning); }
+.cd-pill--danger  { background: var(--danger-light);  color: var(--danger); }
+.cd-pill--info    { background: var(--info-light);    color: var(--info); }
+.cd-pill--muted   { background: #F3F4F6;              color: var(--text-muted); }
+
+/* Clickable pill variant — adds pointer cursor + subtle hover lift. */
+.cd-pill--clickable { cursor: pointer; transition: filter .12s, transform .12s; }
+.cd-pill--clickable:hover { filter: brightness(.97); transform: translateY(-1px); }
+
+/* Filter/toggle chip — pair with [aria-pressed="true|false"] for selection state.
+   Use as <button class="cd-pill cd-pill--clickable" aria-pressed="false">. */
+button.cd-pill { border: none; font-family: inherit; }
+.cd-pill--clickable[aria-pressed="true"]  { background: var(--primary); color: #fff; }
+.cd-pill--clickable[aria-pressed="false"] { background: #F3F4F6;        color: var(--text-muted); }
+
+/* Live status dot — pairs inside a .cd-pill to signal an in-progress state
+   (e.g. "Pending review"). Inherits the pill's text color. */
+@keyframes cd-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+.cd-status-dot {
+  width: 7px; height: 7px; border-radius: 999px;
+  background: currentColor; flex-shrink: 0;
+  animation: cd-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .cd-status-dot { animation: none; } }
+
+/* Tier before→after comparison used by tier-switch cards. */
+.cd-tier-compare { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cd-tier-chip {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  padding: 4px 10px; border-radius: 999px; font-size: 12px; line-height: 1.3;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.cd-tier-chip--from { background: #F3F4F6; color: var(--text-muted); }
+.cd-tier-chip--to   { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+.cd-tier-chip b { font-weight: 800; }
+.cd-tier-arrow { color: var(--text-muted); font-weight: 800; font-size: 13px; line-height: 1; }
+
+/* ── Marketing / public-site tokens ──────────────────────────────────────────
+   Additive layer consumed by the public pages (index, coach-profile, privacy,
+   terms) via marketing.css. The three CoachDesk apps never load marketing.css,
+   so these are inert there. Never edit/rename the tokens above — only append. */
+:root {
+  /* Spacing scale (4px base) — section rhythm + component padding */
+  --space-1:  4px;   --space-2:  8px;   --space-3:  12px;  --space-4:  16px;
+  --space-5:  20px;  --space-6:  24px;  --space-8:  32px;  --space-10: 40px;
+  --space-12: 48px;  --space-16: 64px;  --space-20: 80px;  --space-24: 96px;
+
+  /* Type scale + line-heights */
+  --text-xs:  12px;  --text-sm:  13.5px; --text-base: 15px; --text-md:  17px;
+  --text-lg:  20px;  --text-xl:  24px;   --text-2xl:  28px; --text-3xl: 34px;
+  --leading-tight: 1.15; --leading-snug: 1.35; --leading-normal: 1.55;
+
+  /* Brand-ramp gap fillers — the exact hexes the public pages hardcode today */
+  --primary-800: #4338CA;   /* indigo gradient stop */
+  --violet:      #7C3AED;   /* violet gradient stop */
+
+  /* Hero gradient stops (landing hero, currently raw hexes) */
+  --hero-grad-1: #5B53E6;
+  --hero-grad-2: #4338CA;
+  --hero-grad-3: #7C3AED;
+
+  /* Marketing chrome surfaces */
+  --brand-navy:  #0F1B3D;              /* wordmark navy on light */
+  --footer-bg:   #0F1024;              /* dark footer used by index/privacy/terms */
+  --surface-2:   #F9FAFB;              /* the #f9fafb / #fafafa section fills */
+  --on-dark:     rgba(255,255,255,.82);/* body text on dark panels */
+
+  /* Focus + layout */
+  --focus-ring:    0 0 0 3px rgba(108,99,255,.45);
+  --nav-h:         64px;
+  --container-max: 1120px;
+}
+
+/* Chat-specific tokens (used by message cards in coach + client apps) */
+:root {
+  --chat-card-radius-mine:   18px 6px 18px 18px;
+  --chat-card-radius-theirs: 6px 18px 18px 18px;
+  --chat-card-border:        1px solid #ede9fe;
+  --chat-card-shadow:        0 6px 20px rgba(124,58,237,.08), 0 1px 2px rgba(15,23,42,.04);
+  --chat-accent-checkin:     #7c3aed;
+  --chat-accent-plan:        #6366f1;
+  --chat-accent-session:     #7c3aed;
+  --chat-accent-tip:         #f59e0b;
+}
+
+/* ── Brand wordmark ──────────────────────────────────────────────────────────
+   The HighLinesX logo, recreated as theme-adaptive text. "HighLines" inherits
+   .hlx-logo's color (navy on light, white via --on-dark on dark panels); the
+   "X" is always brand purple. Size it by setting font-size on the parent. */
+.hlx-logo {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: #13183F;
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.hlx-logo .hlx-logo__x { color: var(--primary, #6C63FF); font-weight: 800; font-size: 1em; }
+.hlx-logo--on-dark { color: #fff; }
